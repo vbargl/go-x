@@ -28,11 +28,12 @@ func Recover(recovered any, fns ...ErrorFunc) {
 }
 
 // evaluate goes through all error functions
-func evaluate(err error, efns []ErrorFunc) {
+func evaluate(err error, efns []ErrorFunc) error {
 	for _, fn := range efns {
 		err = fn(err)
 		if err == nil {
 			break
 		}
 	}
+	return err
 }

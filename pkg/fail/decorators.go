@@ -2,6 +2,13 @@ package fail
 
 import "fmt"
 
+// Combine merges all fns into single ErrorFunc
+func Combine(fns ...ErrorFunc) ErrorFunc {
+	return func(err error) error {
+		return evaluate(err, fns)
+	}
+}
+
 // Prefix prefixes error in format "<prefix>: <original error message>" using fmt.Errorf function.
 func Prefix(prefix string) ErrorFunc {
 	return func(err error) error {
