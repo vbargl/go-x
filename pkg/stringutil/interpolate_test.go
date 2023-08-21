@@ -34,11 +34,33 @@ func TestInterpolate(t *testing.T) {
 			},
 			expected: "knock knock knock, Penny!",
 		},
+		{
+			format:    "ending ${",
+			variables: map[string]string{},
+			expected:  "ending ${",
+		},
+		{
+			format:    "ending ${var",
+			variables: map[string]string{},
+			expected:  "ending ${var",
+		},
+		{
+			format:    "escaped $${var}",
+			variables: map[string]string{},
+			expected:  "escaped ${var}",
+		},
+		{
+			format: "escaped ${unknown}",
+			variables: map[string]string{
+				"var": "variable",
+			},
+			expected: "escaped ${unknown}",
+		},
 	}
 
 	for _, p := range params {
 		t.Run(fmt.Sprintf("formating %s", p.format), func(t *testing.T) {
-			if got := Interpolate(p.format, p.variables); got != p.expected {
+			if got := InterpolateMap(p.format, p.variables); got != p.expected {
 				t.Errorf("expected %s, got %s", p.expected, got)
 			}
 		})
