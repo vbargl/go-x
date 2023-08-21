@@ -7,16 +7,27 @@ import (
 
 // InterpolateMap will replace all variables formatted ${varname} in s
 // with values provided by variables map.
+// Interpolated value can be [string], [fmt.Stringer] or [func() string]
 //
 // Variables must be formatted as ident token.
 // See test file for examples.
-func InterpolateMap(s string, variables map[string]string) string {
+func InterpolateMap(s string, variables map[string]any) string {
 	return interpolate(s, func(v string) string {
 		value, ok := variables[v]
 		if !ok {
 			return fmt.Sprintf("${%s}", v)
 		}
-		return value
+
+		switch value := value.(type) {
+		case string:
+			return value
+		case fmt.Stringer:
+			return value.String()
+		case func() string:
+			return value()
+		default:
+			return fmt.Sprintf("${%s}", v)
+		}
 	})
 }
 

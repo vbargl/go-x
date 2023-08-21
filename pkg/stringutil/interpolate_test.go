@@ -8,19 +8,19 @@ import (
 func TestInterpolate(t *testing.T) {
 	type param struct {
 		format    string
-		variables map[string]string
+		variables map[string]any
 		expected  string
 	}
 
 	params := []param{
 		{
 			format:    "Hello ${name}!",
-			variables: map[string]string{"name": "World"},
+			variables: map[string]any{"name": "World"},
 			expected:  "Hello World!",
 		},
 		{
 			format: "http://example.com/path/${var1}/path/${var2}/path",
-			variables: map[string]string{
+			variables: map[string]any{
 				"var1": "value1",
 				"var2": "value2",
 			},
@@ -28,7 +28,7 @@ func TestInterpolate(t *testing.T) {
 		},
 		{
 			format: "${verb} ${verb} ${verb}, ${name}!",
-			variables: map[string]string{
+			variables: map[string]any{
 				"verb": "knock",
 				"name": "Penny",
 			},
@@ -36,22 +36,22 @@ func TestInterpolate(t *testing.T) {
 		},
 		{
 			format:    "ending ${",
-			variables: map[string]string{},
+			variables: map[string]any{},
 			expected:  "ending ${",
 		},
 		{
 			format:    "ending ${var",
-			variables: map[string]string{},
+			variables: map[string]any{},
 			expected:  "ending ${var",
 		},
 		{
 			format:    "escaped $${var}",
-			variables: map[string]string{},
+			variables: map[string]any{},
 			expected:  "escaped ${var}",
 		},
 		{
 			format: "escaped ${unknown}",
-			variables: map[string]string{
+			variables: map[string]any{
 				"var": "variable",
 			},
 			expected: "escaped ${unknown}",
