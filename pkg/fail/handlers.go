@@ -7,7 +7,7 @@ import (
 
 // Assign assigns error into target.
 // Returns err.
-func Assign(target *error) ErrorFunc {
+func Assign(target *error) ErrorRefinerFunc {
 	return func(err error) error {
 		*target = err
 		return err
@@ -16,21 +16,21 @@ func Assign(target *error) ErrorFunc {
 
 // Panic panics when evaluated.
 // Does not return.
-func Panic() ErrorFunc {
+func Panic() ErrorRefinerFunc {
 	return func(err error) error {
 		panic(err)
 	}
 }
 
 // Break just retunrs nil and stoping it from furhter evaluation of error functions.
-func Break() ErrorFunc {
+func Break() ErrorRefinerFunc {
 	return func(err error) error {
 		return nil
 	}
 }
 
 // LogPrint prints error using Log.Print.
-func LogPrint() ErrorFunc {
+func LogPrint() ErrorRefinerFunc {
 	return func(err error) error {
 		log.Print(err)
 		return err
@@ -38,7 +38,7 @@ func LogPrint() ErrorFunc {
 }
 
 // LogPanic prints error using Log.Panic which panics right after evaluation.
-func LogPanic() ErrorFunc {
+func LogPanic() ErrorRefinerFunc {
 	return func(err error) error {
 		log.Panic(err)
 		return nil
@@ -46,7 +46,7 @@ func LogPanic() ErrorFunc {
 }
 
 // LogPrint prints error using Log.Fatal which exists program right after evaluation.
-func LogFatal() ErrorFunc {
+func LogFatal() ErrorRefinerFunc {
 	return func(err error) error {
 		log.Fatal(err)
 		return nil
@@ -54,7 +54,7 @@ func LogFatal() ErrorFunc {
 }
 
 // LoggerPrint prints error using Logger.Print.
-func LoggerPrint(logger *log.Logger) ErrorFunc {
+func LoggerPrint(logger *log.Logger) ErrorRefinerFunc {
 	return func(err error) error {
 		logger.Print(err)
 		return nil
@@ -62,7 +62,7 @@ func LoggerPrint(logger *log.Logger) ErrorFunc {
 }
 
 // LoggerPanic prints error using Logger.Panic which panics right after evaluation.
-func LoggerFatal(logger *log.Logger) ErrorFunc {
+func LoggerFatal(logger *log.Logger) ErrorRefinerFunc {
 	return func(err error) error {
 		logger.Fatal(err)
 		return nil
@@ -70,7 +70,7 @@ func LoggerFatal(logger *log.Logger) ErrorFunc {
 }
 
 // LoggerPrint prints error using Logger.Fatal which exists program right after evaluation.
-func LoggerPanic(logger *log.Logger) ErrorFunc {
+func LoggerPanic(logger *log.Logger) ErrorRefinerFunc {
 	return func(err error) error {
 		logger.Panic(err)
 		return nil
@@ -79,7 +79,7 @@ func LoggerPanic(logger *log.Logger) ErrorFunc {
 
 // Print prints error using fmt.Prinrln.
 // returns err
-func Print() ErrorFunc {
+func Print() ErrorRefinerFunc {
 	return func(err error) error {
 		fmt.Println(err)
 		return err
