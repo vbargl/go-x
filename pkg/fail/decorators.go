@@ -32,18 +32,19 @@ func (ers errorCombiner) RefineError(err error) error {
 	return evaluate(err, ers)
 }
 
-// Prefix prefixes error in format "<prefix>: <original error message>" using fmt.Errorf function.
-func Prefix(prefix string) ErrorRefinerFunc {
+// Wrap formats error in given format using fmt.Errorf function.
+// Format must contain '%w' to wrap given error.
+func Wrap(format string) ErrorRefinerFunc {
 	return func(err error) error {
-		return fmt.Errorf("%s: %v", prefix, err)
+		return fmt.Errorf(format, err)
 	}
 }
 
-// Prefixf prefixes error in format "<prefix>: <original error message>" using fmt.Errorf function.
-// Prefix is formated string using fmt.Sprintf function by passing format and args.
-func Prefixf(format string, args ...any) ErrorRefinerFunc {
+// Wrapf formats error in given format using fmt.Errorf function.
+// Format must contain '%%w' to wrap given error.
+func Wrapf(format string, args ...any) ErrorRefinerFunc {
 	return func(err error) error {
-		prefix := fmt.Sprintf(format, args...)
-		return fmt.Errorf("%s: %v", prefix, err)
+		format := fmt.Sprintf(format, args...)
+		return fmt.Errorf(format, err)
 	}
 }
