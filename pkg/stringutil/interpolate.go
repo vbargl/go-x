@@ -31,6 +31,10 @@ func InterpolateMap(s string, variables map[string]any) string {
 	})
 }
 
+// InterpolateFunc replace each found variable formatted ${varname} through given fn function.
+//
+// Variables must be formatted as ident token.
+// See test file for examples.
 func InterpolateFunc(s string, fn func(string) string) string {
 	return interpolate(s, fn)
 }
